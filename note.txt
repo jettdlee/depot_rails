@@ -18,3 +18,5 @@ setup jquery
 jquery-ui-rails - in gem
 bundle install
 //= require jquery-ui/effects/effect-blind
+
+Helper method - abstract some process our of a view using a helper
