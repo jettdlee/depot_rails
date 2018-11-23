@@ -12,3 +12,9 @@ button_to/link_to - remote: true sends AJAX request to the server containing the
 format.js - respornd with a format of js, cakks method passing an otional block.
 this will look for a template to render wonce function finishes.
 this links with a file.js.erb file in the view
+
+
+setup jquery
+jquery-ui-rails - in gem
+bundle install
+//= require jquery-ui/effects/effect-blind
