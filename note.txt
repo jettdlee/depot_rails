@@ -7,4 +7,31 @@ controller x - include module => concern module
 include currentcart
 before_action - run function
 
-button_to/link_to - remote: true sends AJAX request instead containing the HTML fragment
+button_to/link_to - remote: true sends AJAX request to the server containing the HTML fragment
+
+format.js - respornd with a format of js, cakks method passing an otional block.
+this will look for a template to render wonce function finishes.
+this links with a file.js.erb file in the view
+
+
+setup jquery
+jquery-ui-rails - in gem
+bundle install
+//= require jquery-ui/effects/effect-blind
+
+Helper method - abstract some process our of a view using a helper
+
+
+CHAPTER 11 F5 p164
+important to get name and stream
+
+Action Cable:
+1) channel
+2) broadcast data
+3) receive data
+
+only for localhost
+config.action_cable.disable_request_forgery_protection = true
+
+
+channel/fiel.coffee
