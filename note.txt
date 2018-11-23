@@ -20,3 +20,18 @@ bundle install
 //= require jquery-ui/effects/effect-blind
 
 Helper method - abstract some process our of a view using a helper
+
+
+CHAPTER 11 F5 p164
+important to get name and stream
+
+Action Cable:
+1) channel
+2) broadcast data
+3) receive data
+
+only for localhost
+config.action_cable.disable_request_forgery_protection = true
+
+
+channel/fiel.coffee
