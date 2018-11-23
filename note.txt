@@ -1,0 +1,10 @@
+
+
+
+ajax - async javascript and xml
+
+controller x - include module => concern module
+include currentcart
+before_action - run function
+
+button_to/link_to - remote: true sends AJAX request instead containing the HTML fragment
