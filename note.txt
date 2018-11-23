@@ -7,4 +7,8 @@ controller x - include module => concern module
 include currentcart
 before_action - run function
 
-button_to/link_to - remote: true sends AJAX request instead containing the HTML fragment
+button_to/link_to - remote: true sends AJAX request to the server containing the HTML fragment
+
+format.js - respornd with a format of js, cakks method passing an otional block.
+this will look for a template to render wonce function finishes.
+this links with a file.js.erb file in the view
