@@ -34,4 +34,4 @@ only for localhost
 config.action_cable.disable_request_forgery_protection = true
 
 
-channel/fiel.coffee
+channel/file.coffee
