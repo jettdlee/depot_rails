@@ -61,7 +61,7 @@ class LineItemsController < ApplicationController
     @line_item.destroy
     session[:product_id] = nil
     respond_to do |format|
-      format.html { redirect_to cart_url, notice: 'Item was deleted.' }
+      format.html { redirect_to store_index_url}#, notice: 'Item was deleted.' }
       format.json { head :no_content }
     end
   end
