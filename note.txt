@@ -113,3 +113,9 @@ config.action_cable.disable_request_forgery_protection = true
 
 
 channel/file.coffee
+
+models also stores the array containing fields
+
+
+atom feeds - take advantage of preexisting clients.
+.atom causes rails to look for a template of the functions name
