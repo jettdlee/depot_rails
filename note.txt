@@ -1,5 +1,83 @@
 
 
+String Literal
+single-quoted case - Ruby does very little, what you type into the single-quoted string literal becomes the string’s value.
+double-quoted case - looks for substitutions sequences that start with a backslash character and replaces them with some binary value. \n, which is replaced with a newline character. When you write a string containing a newline to the console, the \n forces a line break.
+expression interpolation in double-quoted strings. #{expression} is replaced by the value of expression.
+array literal—a set of elements between square brackets
+Ruby array indices start at zero
+
+Rails scaffold - auto-generation of a set of a model, views, and a controller usually used for a single database table. scaffold that generates everything that you need (and don't need), models create only some related components
+
+
+YAML1 is a recursive acronym that stands for YAML Ain’t Markup Language. In the context of Rails, YAML is used as a convenient way to define the configuration of things such as databases, test data, and translations
+indentation is important
+
+Marshaling Objects
+convert it into a stream of bytes that can be stored outside the application
+object can later be read by another instance
+copy of the originally saved object can be reconstituted
+
+two potential issues when you use marshalling:
+some objects cannot be dumped. If the objects to be dumped include bindings, procedure or method objects, instances of class IO, or singleton objects, or if you try to dump anonymous classes or modules, a TypeError will be raised.
+when you load a marshaled object, Ruby needs to know the definition of the class of that object
+
+Rails uses marshaling to store session data.
+possible that a particular class may not have been defined at the point it reconstitutes session data
+you’ll use the model declaration in your controller to list all models that are marshaled.
+This preemptively loads the necessary classes to make marshaling work.
+
+Methods such as empty! and empty?
+Ruby method names can end with an exclamation mark (a bang method) or a question mark (a predicate method). Bang methods normally do something destructive to the receiver. 
+Predicate methods return true or false depending on some condition.
+
+a || b
+The expression a || b evaluates a. 
+If it isn’t false or nil, then evaluation stops, and the expression returns a. 
+Otherwise, the statement returns b. 
+This is a common way of returning a default value if the first value hasn’t been set.
+
+a ||= b
+The assignment statement supports a set of shortcuts: a op= b is the same as a = a op b.
+
+obj = self.new
+Sometimes a class method needs to create an instance of that class.
+
+lambda
+The lambda operator converts a block into an object of type Proc.
+
+
+require File.expand_path('../../config/environment', __FILE__)
+Ruby’s require method loads an external source file into our application.
+This is used to include library code and classes that our application relies on.
+In normal use, Ruby finds these files by searching in a list of directories, the LOAD_PATH.
+
+use case is simply a statement about how some entity uses a system.
+
+
+
+
+Fixtures - env to run tests
+contains YAML
+
+fictures() laods data corresponding to the given model name into the corresponding database before each test method
+using :product will call product.yml to be used
+
+this empties the table and populates with row
+
+dev.sql - developement database
+test.sqp - test
+production.sql - production
+
+concern - tool provided by ActiveSupport for including modules in classes creating mixins.
+
+controller, include - links to concern module to use functions
+
+find_by - streamline where(). returns either line item or nil instead of array
+
+rescue_from - intercepts exception
+logger.error - records the error
+redirect_to - prevents user from retriggering error
 
 ajax - async javascript and xml
 
@@ -34,4 +112,10 @@ only for localhost
 config.action_cable.disable_request_forgery_protection = true
 
 
-channel/fiel.coffee
+channel/file.coffee
+
+models also stores the array containing fields
+
+
+atom feeds - take advantage of preexisting clients.
+.atom causes rails to look for a template of the functions name
