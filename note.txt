@@ -143,3 +143,60 @@ html_safe - informs rails the string can be interpreted as html
 set translation pack in application controller
 within html, convert content with t('.tag')
 tag links with .yml file with the same tag
+
+
+Chapter 17
+MODELS
+all persistent data retained by the app is managed
+five models created: cart, lineitem, order, product, user
+default, all models have id, created_at, updated_at attributes.
+we added attributes of type string, int, text, decimal, and foreign keys, and a virtual attribute for a password.
+has_many/belongs_to relationships used to navigate among our model objects
+migrations update the databases to introduce and modify data.
+models can be used to actively validate sata, preventinf errors from propagating.
+validations for presence, inclusion, numericality, range, uniqueness, format, and confirmation.
+custom validation ensures deleted products aren't referenced by any line item.
+active record hook ensures admin always remain and used a transaction to roll back incomplete updates on failure.
+used logic to add product to cart, add all line itemd from cart to order, encrypt and authenticate password, and compute total
+created default sort order for products for display purposes.
+
+VIEW
+controls the application presentation to the world.
+default, scaffold provides edit, index, new, and show, as wella s partial forms shared between new and edit.
+new views were created, admin, sessions, and store.
+updated layout to establish a common look of the entire site.
+linked stylesheets
+used templates to generate javascript, using AJAX and WEBSOCKET for more interactivity.
+helper directed when to hide cart from the main view.
+localized the customer views for display in english and spanish.
+created plain and ATOM views, and for email
+
+CONTROLLER
+controllers interacted with the models, from finding and fetching data and putting it into instance variables to update models and saving data entered.
+this redirects to action or rendered view in HTML JSON and ATOM.
+limited the set of permitted parameters on the line item controller.
+created callback actions that were run before selected actions to find the cart, set the language, and authorize requrets.
+logic common to a number of concerns
+managed sessions, tracking logged users and carts.
+tracked current locale used for internationalization
+captured errors, logged, and informed users.
+emplyed fragmet caching on storefront and page-level caching
+sent confirmation emails
+
+CONFIGURATION
+conventions keep to a minimum the iamount of configuration required.
+modified database configurations.
+defined routes for resources, admin, and session controllers, and the root of the site.
+defined who_bought of our products resources to access atom feeds
+created initializers for i18n putposes and updated locales information for both en and es.
+created seed data
+created Capistrano script for deplyment, including the definition of a few custom tasks
+
+TESTING
+maintained and enhanced test throughout
+emplyed unit tests to validation methods
+also tested increasing quantity
+rails provided basic tests for all units.
+tests added fro AJAX and ensuring cart has items.
+used fixtures to provide test data to fuel test.
+created integration test to end-to-end senarios.

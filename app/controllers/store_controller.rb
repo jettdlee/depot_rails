@@ -9,5 +9,5 @@ class StoreController < ApplicationController
     else
       @products = Product.order(:title)
     end
-  end
+   end
 end
