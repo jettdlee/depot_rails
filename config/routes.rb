@@ -1,10 +1,22 @@
 Rails.application.routes.draw do
+  get 'admin' => 'admin#index'
+
+  controller :sessions do
+    #get 'sessions/new'
+    get 'login' => :new
+    #get 'sessions/create'
+    post 'login' => :create
+    #get 'sessions/destroy'
+    delete 'logout' => :destroy
+  end
+
+
+  resources :users
   resources :orders
   resources :line_items
   resources :carts
   get 'store/index'
 
-  resources :products
 
   root 'store#index', as: 'store'
   
