@@ -135,3 +135,11 @@ rails creates the corresponding units or functional tests
 Integration, however, are not auto created, but can be generated
 integration wanders over the app, so we need to pass a full URL for the controller and action to be invoked
 
+
+
+Chapter 15
+i18n.rb - internationalization - associates between display names and locale name
+html_safe - informs rails the string can be interpreted as html
+set translation pack in application controller
+within html, convert content with t('.tag')
+tag links with .yml file with the same tag
