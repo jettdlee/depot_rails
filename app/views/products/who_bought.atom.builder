@@ -4,8 +4,10 @@ atom_feed do |feed|
     feed.updated @latest_order.try(:updated_at) 
   
     @product.orders.each do |order|
+
       feed.entry(order) do |entry|
         entry.title "Order #{order.id}"
+
         entry.summary type: 'xhtml' do |xhtml|
           xhtml.p "Shipped to #{order.address}"
 

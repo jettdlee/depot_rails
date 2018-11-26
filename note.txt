@@ -1,4 +1,4 @@
-
+s
 
 String Literal
 single-quoted case - Ruby does very little, what you type into the single-quoted string literal becomes the string’s value.
@@ -119,3 +119,19 @@ models also stores the array containing fields
 
 atom feeds - take advantage of preexisting clients.
 .atom causes rails to look for a template of the functions name
+
+unit testing of models - contains business logic. add product to cart > cart model checks
+if product is already in list of items > if so increment quantity, else add new item
+
+functional testing of controllers - controllers direst the show. recieve web requests > 
+interact with models to get app state > respond with view to display to user.
+when testing controllers, make sure requestes is answered with appropriate response
+we need models, but has already covered with unit tests
+
+Test flow of application.
+Integration test - simulates a continuous session between one or more virtual users and app.
+used to send requrests, monitor responses, follow redirects ...
+rails creates the corresponding units or functional tests
+Integration, however, are not auto created, but can be generated
+integration wanders over the app, so we need to pass a full URL for the controller and action to be invoked
+
