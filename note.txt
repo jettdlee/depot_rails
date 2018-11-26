@@ -1,4 +1,4 @@
-
+s
 
 String Literal
 single-quoted case - Ruby does very little, what you type into the single-quoted string literal becomes the string’s value.
