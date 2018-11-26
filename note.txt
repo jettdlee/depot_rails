@@ -200,3 +200,32 @@ rails provided basic tests for all units.
 tests added fro AJAX and ensuring cart has items.
 used fixtures to provide test data to fuel test.
 created integration test to end-to-end senarios.
+
+
+CHAPTER 18
+Rails assumes certain runtime directory layout and provides applications and scaffold generators.
+rails_app
+app - model, view, controller
+bin - wrapper scripts
+config - configuration and database connection parameters
+config.ru - Rack server configuration. configures the Rack Webserver Interafce, to create Metal applciations or use 
+Rack middle wares in the rails app. 
+db - schema and migration information
+gemfile - specifies gem dependencies. also includes the database, web server, and scripts used for deployment.
+this is used by the bundler in the config/applications and boot files
+gemfile.lock - records versions for the rails applicaitons dependencies. maintained by bundler
+lib - shared code
+log - log fiels producted by the application
+public - web-accessable directory. application runs form here
+rakefile - builds script and defines tasks to run test, create documentation, extract the structure of the schema.
+Type rake -T prompt for full list. rake -D shows complete description.
+readme.md - installation and usage information
+test - unit, functional, and integration tests, fixtures, and mocks
+tmp - runtime temporary files
+vendor - imported code
+
+
+LIBARIES PLACE
+lib holds application code mot in the model, view, or controller.
+these are sent directly from the controller to the browser.
+you can also place code shared among models, view, or controllers.
