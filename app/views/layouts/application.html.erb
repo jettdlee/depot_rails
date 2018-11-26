@@ -25,10 +25,10 @@
       <% end %>
 
       <ul>
-        <li><%= link_to "Home", store_url %></li>
-        <li>Questions</li>
-        <li>News</li>
-        <li>Contact</li>
+        <li><%= link_to t(".home"), store_path %></li>
+        <li><%= t(".questions") %></li>
+        <li><%= t(".news") %></li>
+        <li><%= t(".contact") %></li>
       </ul>
 
       <% if session[:user_id] %>

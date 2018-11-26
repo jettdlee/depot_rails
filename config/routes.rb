@@ -23,7 +23,7 @@ Rails.application.routes.draw do
     root 'store#index', as: 'store', via: :all
   end
 
-  get 'store/index'
+  #get 'store/index'
   
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
 end

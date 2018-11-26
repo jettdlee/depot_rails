@@ -140,3 +140,6 @@ integration wanders over the app, so we need to pass a full URL for the controll
 Chapter 15
 i18n.rb - internationalization - associates between display names and locale name
 html_safe - informs rails the string can be interpreted as html
+set translation pack in application controller
+within html, convert content with t('.tag')
+tag links with .yml file with the same tag
