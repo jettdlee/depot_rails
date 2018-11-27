@@ -317,3 +317,209 @@ therefore splits inside the application.
 templates appear in subdirectories of app/view.
     http://my.app/admin/book/edir/1234
     app/view/admin/book/edit.htl.erb
+
+
+---------------------------------------------------------------
+CHAPTER 19 - ACTIVE RECORD
+Active Record = object-relational mapping layer
+
+DEFINING DATA
+defined a number of models with attributes, such as email in a string.
+rails provides a id containing the primary key for the record and additional attributes to track time.
+rails support relationships between models such as orders and line items.
+
+ORGANIZING TABLES AND COLUMNS
+each subclass of ApplicationRecord, such as Order, wraps a seperate database table.
+active record assumes name of the table associated with a given class is the plural form of the class name.
+if name contains multiple capitalized words, table name is assumed to have underscores between words.
+    Order > orders
+    TaxAgency > tax_agencies
+    Person > people
+these rules reflect rails philosophy that class names should be singular, and tables plural.
+sometimes may not be handled correctly.
+add to rails understanding of the idiosyncrasise by modifying config/initializers/inflections.rb, inflect.irregular
+in legacy tables, you can control the name with self.table_name
+Active record classes correspond to rows in a database table.
+objects have attributes correspondingto teh columns in the table.
+class order didnt mention any columns in hte orders table.
+active record determines them dynamically.
+this reflects the schema inside the database to configure the classes that wrap tables.
+setting value of an attribute does not change anything in the database.
+we must save the object for this change to become permanent.
+value returned is cast by ACtive Record to an appropriate ruby type.
+append _before_type_cast to get raw value.
+
+ADDITIONAL COLUMNS PROVIDED BY ACTIVE RECORD
+column names has significance to active record:
+    created_at, created_on, updated_at, updated_on - 
+    automatically updated. ensure underlying database column is compatable. rails uses _on and _at to include time
+    id - default name of primay key
+    xxx_id - default name of foreign key ref to xxx table
+    xxx_count - counter cache for child table xxx
+
+
+LOCATING AND TRAVERSING RECORDS
+LineItem has a direct relation to cart, order, and product.
+models has indirect relationship mediated by resource object
+relationship between orders and products through line itens is an example.
+
+IDENTIFYING INDIVIDUAL ROWS
+Active record classes corresponds to tabels in a database.
+instances corresponds to individual rows in a database table.
+For new schemas, id for all tables is preferable.
+however for existing schemas active record allows overriding the name.
+    self.primary_key
+AR takes care of creating primary key values for records created and add to the database.
+if we override primary key, we need to set the key to a unique value before we save. 
+we still set an id to do this.
+primary_key= declares name of column to use in the table. 
+when you need to set the primary key, use id, else use actual column name.
+mdoel objects also redefine ruby id() andhash() to ref primary key.
+unsaved model objects cannot reliably be used as hash keys.
+rails considers two model objects as equal if instances of the same class has the same primary key.
+therefore, unsaved model objects may compare as equal even with different attribute data.
+
+SPECIFYING RELATIONSHIPS IN MODELS
+AR supports 3 types of relationship between  tables:
+    1-to-1 - is implemented using a foriegn key in one row in one table to reference a single row. 
+    might exist between orders and invoices. model for the table containing foreign key always has belongs_to
+    1-to-many - represents collection of objects. number of associated line items. 
+    AR, parent object containing collection of child objects, uses has_many and child uses belongs_to
+    many-to-many - use has_and_belongs_to_many, association is symetrical. 
+    rails implements using an intermediate join containing foreign keys. AR assumes concatenation.
+indicate:
+    has_one
+    has_many
+    belongs_to
+    has_and_belongs_to_many
+
+
+CREATING, READING, UPDATING AND DELETING (CRUD)
+CREATING NEW ROWS
+create new objects in table by calling Table.new(), and fill with attributes.
+need to call save() to store back to database.
+AR constructors take an optional block.
+invoked with newly created order as a parameter.
+useful if you wanted to create and save an order without creating a new variable.
+AR constructors accpts hash of attribute vlaue as an optional parameter.
+each entry corresponds to name and vlaue of an attribute.
+useful for sorting things like storing values.
+AR default sets an integer for primary key.
+new() creates object in memory and needs to save in database.
+.create() uses both new() and save()
+create() can pass arrays to store multiple information.
+using hash values allows you to construct model objects from form parameters
+
+READING EXISTING ROWS
+first specify row of data by giving AR a criteria to return a object.
+use primary key
+every model class has find()
+given one primary key, find() returns an array.
+RecordNotFound exception is raised on error
+often, read rows based on criteria other than primary key.
+AR provides additional methods to express more complex queries.
+
+SQL AND ACTIVE RECORD
+AR works with SQL passing simple stings to where()
+dont use variable #{x} due to injection attack.
+if we pass multiple parameters to a where() call, rails treats first parameter as a template
+we can embed placeholders (:name) to replace values in the array. done by inserting question marks.
+or pass full order params[:order]
+
+USING LIKE CLAUSES
+rails doesnt parse SQL inside condition and doesn't know the name is being substituted into a string.
+need to pass the full parameter and parameter
+
+SUBSETTING THE RECORDS RETURNED
+ActiveRecord::Relation, first() and all()
+to_a() - returns rows as array
+query is not evaluated unless the method is used
+this allows us to modify the query by alling additional methods.
+    .order - add order by to specify the criteria normally add after order by.
+    .limit - linit the number of rows returned. when used, also specify order for consistency.
+    .offset - specify offset of the first row results. 
+    .select - select limits values returned if only a subset is needed.
+    .joins - specify a list of addiitional tables to be joined. inserted after name and before any conditions.
+    .readonly - return objects that cannot be stored back in database.
+    .group - group items
+    .lock - takes optional string. should be a SQL fragment that specifies a lock. share mode gives latest data in row and gurantees.
+    database default exclusive lock is obtained. transactions eliminate the use of locks.
+
+GETTING COLUMN STATISTICS
+statistics can be given using .average, .maximum, .minimum etc.
+these corresponds to aggregate functions in the underlying database and can be combined with methods.
+returns a single value by default.
+However, with group method, products a series for each set of records.
+this returns a hash.
+you can iterate over entries in order.
+this is no longer database independent.
+
+SCOPES
+making chains themselves for reuse becomes a concern.
+AR scope can be associated with a Proc and have arguments.
+scopes makes application code easier to write and read, and more efficent
+scopes can bu used for any condition, however only limited to one clause
+
+WRITING OUR OWN SQL
+each method contributes to teh construction of a full SQL query string.
+find_by_sql() accepts a parameter containing a select statement and returns an array
+only attributes returned by query will be avalible in the resulting model.
+the first returns a hash of attributes name-value pairs
+second, name
+third, true
+find_by_sql can be used to craete model objects contraining derived column data.
+XXX syntax give derived column, a name in the result set.
+we can pass an array where the first element is a string conmtaining placeholders and the rest as hash.
+
+RELOADING DATA
+from multiple access, fetched model may be outdated.
+you need to refresh a model manually.
+AR calls reload()
+
+UPDATING EXISTING ROWS
+you can write to the database using save()
+if object previously read, the save will update existing row, else insert new row
+primary key column will match with in-memory object.
+attributes contrained determin the columns that is updated only if value is changed.
+in addition to save(), AR lets us change the values of attributes and save a model object ijn a single call to update().
+update() is used in controller actions merging data from a from to database row.
+we can combine functions of reading a row and updating using class methods update() and update_all().
+update() take id parameter and a set of attributes.
+it fetches the corresponding row, updates and attributes, saves the result and returns the model object.
+pass update() an array of IDs and an array of attribute value hashes to update all corresponding rows.
+update_all class allows us to specify the set and where clauses of the SQL update statement.
+update_all depends on the database adapter.
+
+!!
+save returns true if record was saved, else nil
+save! returns true of save succeeded, else error exception
+create returns AR object regaradless of success or fail. check object for validation errors to determine if written.
+create! returns AR object on success, else error exception
+
+DELETING ROWS
+AR support two styles of row deletion.
+    delete() - takes single ID or array and deleted corresponding rows.
+    delete_all() - delete rows given condition, or all rows.
+return values depend on the adapter.
+destrot methods are the second form via AR object.
+    destroy() - deletes from the database corresponding to model object. freezes object preventing changes
+both methods read the corresponding rows and call instance-level destroy
+delete bypasses various AR callback and validation, while destroy ensure they are invoked.
+better to use destroy to ensure database is consitent
+
+PARTICIPATING IN THE MONITORING PROCESS
+AR controls the life cycle of model objects.
+using callbacks, AR lets the code participate in monitoring process.
+callback can perform complex validation, map column values as passed in and out of the database.
+    before/after_validation - accepts on: :create or :update which causes the callback to be called only on the selected operation.
+    after_find - invokes after any find operation
+    after_initialize - invoked after AR model object is created
+to execute callback, write handler and associate with appropriate callback.
+prefered way is to declare handler as a method or block.
+associate handler with particulat event using class methods after the event.
+to associate method, declare as private or protected, and specify name as a symbol.
+to specify block, add after declaration
+you can specify multiple handlers for the same callback that will generally invoke in order specified.
+you can define callback instacne methods using callback objects, inline methods, or inline eval methods.
+
+
