@@ -522,4 +522,21 @@ to specify block, add after declaration
 you can specify multiple handlers for the same callback that will generally invoke in order specified.
 you can define callback instacne methods using callback objects, inline methods, or inline eval methods.
 
+GROUPING RELATED CALLBACKS TOGETHER
+convienient to group into seperate handlers.
+these can be shared between multiple models.
+handler class is simply a class that defines callback methods.
+model object that uses handlers, create an instance if this handler class and pass that instance to the various callback declarations.
+handler needsd to encrypt a given set of attributes in a model before the models data is written.
+callbacks are good but can sometimes result iun a model class taking responsibility, not related to the model.
 
+TRANSACTIONS
+transaction groups a series of changes that either the database applies all the changes or applies non.
+withiin transaction, every SQL statement succeeds or have no effect.
+if any sttatement fails, entire transaction has no effect on the database
+AR use transaction() to execute block in the context of a database transaction
+at the end of a block, transaction is committed, updating the database unless exception is raised and rolled back.
+because transaction exist in database connection, we invoke with AR receiver
+
+Passing Parameters
+method(param_name: params[:url_param])
