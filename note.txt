@@ -545,15 +545,20 @@ BUILT-IN TRANSACTIONS
 AR takes care of saving all dependent child rows when you save parent row.
 takes multiple SQL statement execution
 change should be atomic
-
-
-
-
+transactions exhibit ACID properties:
+    atomic
+    consistency
+    isolation
+    durable
 
 
 RAKE SCHEDULE
 
 schedule.rb - set time task
 create rake file in lib/tasks/scheduled
+test -     When { Rake::Task['delete_blocked_users_bank_feed_credentials'].reenable }
+    When { Rake::Task['delete_blocked_users_bank_feed_credentials'].invoke }
+    Then { expect { Company::BankFeedCredential.find(blocked_bfc.id) }.to raise_error(ActiveRecord::RecordNotFound) }
+    And { non_blocked_bfc.reload.present? }
 
 
