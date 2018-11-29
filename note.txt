@@ -540,3 +540,20 @@ because transaction exist in database connection, we invoke with AR receiver
 
 Passing Parameters
 method(param_name: params[:url_param])
+
+BUILT-IN TRANSACTIONS
+AR takes care of saving all dependent child rows when you save parent row.
+takes multiple SQL statement execution
+change should be atomic
+
+
+
+
+
+
+RAKE SCHEDULE
+
+schedule.rb - set time task
+create rake file in lib/tasks/scheduled
+
+
