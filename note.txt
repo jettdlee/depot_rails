@@ -553,15 +553,131 @@ transactions exhibit ACID properties:
 
 
 CHAPTER 20
+ActionDispatch - routes requrest into responses
+ActionController - converts requrest into responses
+ActionView - used by Action Controller to format responses
+these processes incoming requests 
 
+DISPATCHING REQUESTS TO CONTROLLERS
+two ways to define the request route:
+    comprehensive way - define direct mapping of URLs to actions based on pattern matching, requi, and conditiona. 
+    convienient way - define routes with resources and freely mix approaches
+rails encodes information in URRL request and usese subsytem action dispatch
+process is flexable but needs to determin name of controller that handles requests
+routes support the mapping between URLs and actions based on contents of the URL
+rails supports a higher level way f creating groups of related routes.
 
-RAKE SCHEDULE
+REST: REPRESENTATIONAL STATE TRANSFER
+sservers communicate with clients using stateless connections.
+state of the interaction between the two is encoded into the request and responses between them.
+long-term state is kept on the server as a set of identifiable resources.
+clients access resources using well defined set of resource identifiers.
+REST distinguishes the content of resources from the presentation of that content.
+REST is designed to support highly scalable computing while constraining application architectures to be decoupled by nature.
+RESTful mean that network designers know when and where cache responses to requests. this enables load to be pushed out through the network increasing performance and resilience
+constraints imposed by REST leads to easier write applications.
+dont need to implement remotely accessible servers. instead provide regular interface to a set of resources.
+application implements a way of listing creating,editing, and deleting resources.
+REST tells us to structure the interface to our applications too.
+rails has direct support for this type of interface
+resources causes new routes to be added to the app.
+the columns are route name.
+routes are named enabling you to use helper functions such as products_url and edit_product_url(id:1)
+each route is defined with optional format specifier
+destroy must issue a HTTP DELETE, therefore: calls method: :delete in the link_to
 
-schedule.rb - set time task
-create rake file in lib/tasks/scheduled
-test -     When { Rake::Task['delete_blocked_users_bank_feed_credentials'].reenable }
-    When { Rake::Task['delete_blocked_users_bank_feed_credentials'].invoke }
-    Then { expect { Company::BankFeedCredential.find(blocked_bfc.id) }.to raise_error(ActiveRecord::RecordNotFound) }
-    And { non_blocked_bfc.reload.present? }
+ADDDING ADDITIONAL ACTIONS
+extend route with call, which adds new actions with the HTTP GET.
+:member, :collection applies to whole collection used for scoping
 
+NESTED RESOURCES
+resources contails additional collections of resources.
+this defines top-level set of product routes and creates a set of subroutes for review.
+the resource must be quantified by the parent and prefiexed with the path (product/11/review/33)
+
+ROUTING CONCERNS
+refactor routes using concerns to capture common behavior
+acts as a funtion to repeat code
+these are in the routes file
+
+SHALLOW ROUTE NESTING
+Shallow route nesting to resolve bad url 
+/products/1/reviews => product_reviews_index_path(1)
+
+SELECTING DATA REPRESENTATION
+can respont with different formats
+rails passes the format of response as the URL using :format in the route
+set to the format of MIME type
+we can then use a respond_to block to select the respond type
+rails makes it simple to develop an app based on resource routing.
+
+PROCESSING OF REQUESTS
+ACTION METHODS
+when processing a request, it looks for public instance method with the same name.
+if found, method is invoked.
+else, controller implements method_missing(), passing the action and empty arguement.
+if no method can be called, controller looks for a template named after current controller and action.
+if found, remplate renders, else ActionNotFound error.
+
+CONTROLLER ENVIRONMENT
+controller sets up the environemnt for actions
+methods provide direct access to information in the URL.
+    action_name - name of action processed
+    cookies - associated with request. setting values in objects stores cookies when respons is sent.
+    headers - hassh of HTTP headers used in response. def, Cache-Control = no-cache
+    params - hash-like object contraining request parameters (along pseudoparameters). can index entries usine eiter a symbol or string. params[:id] = params['id']
+    request - incomming request object
+        request_method - returns request method, :delete, :get, :head, :post, or :put
+        method - returns same value as teuqest_method except :head, returns:get
+        delete?, get?, head?, post? - boolean based on request
+        xml_http_request - boolean, issued by ajax healper.
+        url - returns full URL
+        protocol, host, port, query_string - returns URL component 
+        domain - returns last two compoenet of domain name
+        host_with_port - host:port string
+        port_string() - :port string for the request of port
+        ssl?() true if SSL request made with HTTPS protocol
+        remote_ip() - returns remotr IP addess
+        env - environment request 
+        accepts - array with MIME::Type
+        format - computerd based on value of accept header
+        content_tpye - MIME type for the request
+        headers - complete HHTP headers
+        body - requeset body as IO stream
+        content_length - number of bytes purported in body
+    response - filled during handling of requests
+    session - represents session data
+
+RESPONDING TO THE USER
+render tempate as view, taking information provided by controller and using it to generate response
+controller return string to breower without invoking a view.
+controller return nothing to browser . used when responding with Ajax request
+controller send other data to client.
+controller always responds one time per request, and checks to see a responst has been generated before finished handling a request.
+if not controller looks far a template named after controller and renders.
+
+RENDERING TEMPLATES
+template file defines content of a response
+    erb - embedded ruby code
+    builder - more programmatic way of constructing xml
+    rsj - generates javascript
+template action of controller with be in controller/action.type.x
+override whis for entire application using ActionController.prepend_view_path dir_path
+    render - no overriding parameter, renders default template for current controller 
+    render(text: string) - sends given string to client. no template interpretation is performed
+    render(inline: string, [type: "erb"|"builder"|"coffee"|"scss"],[locals:hash]) - 
+    interprets string as source, renderws results. use :local to set values of local variables
+    adds method_missing() to controller if application is running. renders inline template if controller called.
+    render(action: action_name) - renders template for given action. does not call action method but displays template.
+    render(template: name, [locals: hash]) - renders and arranges resulting text to sent back to client, :template must contain both controller and action parts of the new name.
+    render(file: path) - rebders view outside app
+    render(partial: name, ...) - partial template
+    render(nothing: true) - empty body
+    render(xml: stuff) - renders stuff as text
+    render(json: stuff, [callback: hash]) - renders as JSON, forcing application/json
+    render(:update) do |page| ... end - block as RJS
+all render takes:
+    :status -  provides value used in header of HTTP response
+    :layout - determines result of rendering 
+    :content_type
 
