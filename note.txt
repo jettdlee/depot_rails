@@ -798,4 +798,22 @@ callbacks defined in children will not run parent.
 you can override the process with skip_before/after_action
 skip_action to skip callbacks, only works with specified name
 
+CHAPTER 21 - ACTION VIEW
 
+USING TEMPLATES
+
+WHERE TEMPLATES GO
+render() expecte templates in app/view
+convention is to have seperate subdirectory for views of each controller.
+each dir contains remplates named after actions in the corresponding controller
+can render other templates using:
+    render(action: 'action_name')
+    render(template: 'controller/name')
+    render(file: 'dir/template')
+
+THE TEMPLATE ENVIRONMENT
+mixture of fixed text and code
+adds dynamic content to responses
+code runs in environemnt that gives access to the information setup by controller
+all iunstance variables of the controller are also available in the template
+objects flash, headers, logger, params, request, resonse and session are available as accessor methods
