@@ -679,5 +679,123 @@ override whis for entire application using ActionController.prepend_view_path di
 all render takes:
     :status -  provides value used in header of HTTP response
     :layout - determines result of rendering 
-    :content_type
+    :content_type - specify value passed to browser in the content-type
+
+SENDING FILES AND OTHER DATA
+send_data(data, options...)
+sends a data stream to client
+browser uses content type and disposition
+send_data:
+    disposition - suggests brower that the file should be displayed inline or downloaded and saved
+    filename - default file name when save
+    status - status code (def: 200 ok)
+    type - content type
+    url_based_filename - option prevens providing base name in content-disposition header.
+send_file(path,options...):
+    buffer_size - amount sent to brower in each write
+    filename
+    status
+    stream - if false, file is read to server mem and sent, else, read and written
+    type
+
+REDIRECTS
+sent from server to client in response to request.
+use redirects to pass processing of a request to some other action.
+handeled behind the scenes by web browsers.
+redirect from a server acts as the same as an end user enter the new destination manually.
+it sends back the URL, therefore refresh sends the same request.
+use redirect_to to resolve problem.
+can redirect to action in controller,to URL, or previous page
+    redirect_to(action:...,options:...) - sends redirection to browser based on option hash.URL generated using url_for.
+    redirect_to(path) - does not rewrite, and should not be used to create paths to link actions
+    redirect_to(:back) - redirects to URL given by HTTP_REFERER header in request
+all redirection sare temporary.
+set status in response to make permanent
+
+OBJECTS AND OPERATIONS THAT SPAN REQUESTS
+RAILS SESSIONS
+hash-like structure
+holds any objects, ideal for state information in web apps.
+default send as cookies limiting size and increases bandwidth.
+store on server, requires more setup with a session ID as cookie.
+rails keeps persistent store of session data on the server
+rails looks up data using session id
+seserializes and stores results in coltrollers session.
+there are some restriction son objects stored.
+objects in a session must be serializable, therefore cannot store in IO object
+if storing model object, must add model declaration.
+rails preload model class to deserialize from session
+dont store massive objects in session data
+dont store voltile objects. this is stored in database
+dont store critial information
+if objects stored in session, appp will retreive the object.
+however if the app was updated. session may not agree with class definition.
+to resolve:
+    store in database using conventional models
+    manually delete all session data.
+    add version number to session and change when updating.
+session store is hash, so you can save multiple objects in key.
+sessions are lazily loaded and dont need references
+
+SESSION STORAGE (config/initializers)
+session_store determines the session storage mechanism
+defined in ActiveSupport::Cache::Store module
+symbol is converted to CamelCase
+session_store = 
+    :cookie_store - default session, format represents objects in marshaled form
+    :active_record_store - activerecord-session_store gem to store session data
+    :drb_store - DRb protocol processes to share object over network. stores in DRb server
+    :mem_cace_store - freely available distributed object caching system.
+    :memory_store - stores locally in memory
+    :file_store - store in flat files
+
+SESSION EXPIRY AND CLEANUP
+each session adds something to session store
+needs to clean to maintain resources
+can be acheived by expiring code by removing server-side session data.
+browser request subsequently arrive contraining a session ID for data deleted.
+implementing expiration depends on storage mechanism used.
+use updated_at columns.
+
+FLASH: COMMUNICATING BETWEEN ACTIONS
+redirect_to generates seperate request to invoke actions.
+use flash to communicate between two instances.
+flash is temporary scratchpad
+organised like hash and stored in session data.
+vlaues stored will be available during processing of the immediately following request.
+once processed, values removed from flash.
+common use is to pass error and informatioal strings from one action to the next.
+flash can be used to pass messages into a template.
+flash.now creates transisient flash entry
+flash.keep does the opposite
+flash can pass all information
+
+CALLBACKS
+write code that wrap the process performed by actions
+called in any action in controller.
+implement authentication, logging, response compression or customization
+    before
+    after 
+    around 
+
+BEFORE AND AFTER CALLBACKS
+invoked before action
+maintains two chains of callbacks when a controller runs an action.
+executes all callbacks on the before chain
+callbacks are passive. 
+monitoring activity performed by controller
+callback also accepts blocks, will be called with current controller as a parameter
+apply to all actions in controller and modify with only option.
+around callbacks wrap the execution of actions
+callback is a single chunk of code, called before action is executed
+if invoke yield, action is executed, thus code before yield is like a before action.
+aroudn callbacks retain context across invocation of the action.
+callback block passed as two parameters, object and proxy
+use call on second parameter to invoke original action.
+
+CALLBACK INHERITANCE
+callbacks defined in children will not run parent.
+you can override the process with skip_before/after_action
+skip_action to skip callbacks, only works with specified name
+
 
