@@ -817,3 +817,41 @@ adds dynamic content to responses
 code runs in environemnt that gives access to the information setup by controller
 all iunstance variables of the controller are also available in the template
 objects flash, headers, logger, params, request, resonse and session are available as accessor methods
+current controller is accessible using controller attribute
+this allows the template to call any public method in the controller
+path to the base directory of the templates is stored in the attribute base_path
+
+WHAT GOES IN A TEMPLATE
+rails support 4 templates
+    builder uses builder libary to construct XML responses
+    coffeescript creates javascript, change both presentation and behavior ot content
+    ERB remplates are a mixture of content and embedded ruby. used to generate HTML pages.
+    SCSS templates create css sytlesheets to control presentaion of content
+
+GENERATING FORMS
+HTML collects data from forms.
+labels associate test with input, text will default to field name unless specify.
+specify a placeholder to be displayed inside field until value provided
+placeholders are features provided with html
+    search_field()
+    telephone_field()
+    url_field()
+    email_field()
+    number_field()
+    range_field()
+May display information differently in borwsers
+
+PROCESSING FORMS
+attributes in the model pass through the controller to the view
+rails extracts the fields from the form and constructs the params hash
+if a parameter has brackets, rails assumes it is part of a more structured data and constructs has to hold the values.
+inside, the string acts as the key
+process can repeat if parameter has multipole sets.
+    id=123 => {id:"123"}
+    user[name]=Dave => {user:{name: "Dave"}}
+    user[address][city]="Wien" => {user:{address: {city: "Wien}}}
+    user.update(user_params)
+
+UPLOADING FILES TO RAILS APPLICATIONS
+files are uploaded as a multipart/form-data POST message
+use <input> with type="file"
